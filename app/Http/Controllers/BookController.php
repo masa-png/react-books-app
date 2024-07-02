@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BookController extends Controller
 {
@@ -12,15 +13,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $books = Book::all();
+        return Inertia::render('books/Index', ['books' => $books, 'message' => session('message')]);
     }
 
     /**
@@ -28,38 +22,35 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'title' => 'required|max:20',
+            'content' => 'required|max:100',
+            'category' => 'required|max:10',
+        ]);
+        $book = new Book($request->input());
+        $book->save();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Book $book)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Book $book)
-    {
-        //
+        return redirect('books')->with(['message' => '登録しました']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, $id)
     {
-        //
+        $book = Book::find($id);
+        $book->fill($request->input())->saveOrFail();
+
+        return redirect('books')->with(['message' => '更新しました']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
+    public function destroy($id)
     {
-        //
+        $book = Book::find($id);
+        $book->delete();
+        return redirect('books')->with(['message' => '削除しました']);
     }
 }
