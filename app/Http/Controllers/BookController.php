@@ -14,7 +14,7 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::all();
-        return Inertia::render('books/Index', ['books' => $books, 'message' => session('message')]);
+        return Inertia::render('Books/Index', ['books' => $books, 'message' => session('message')]);
     }
 
     /**
