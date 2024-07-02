@@ -16,8 +16,11 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
+        $categorys = ['React', 'Vue', 'Laravel'];
         return [
-            //
+            'title' => $this->faker->realText(12),
+            'content' => $this->faker->realText(20),
+            'category' => $this->faker->randomElement($categorys)
         ];
     }
 }
